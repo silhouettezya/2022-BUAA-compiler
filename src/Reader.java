@@ -8,7 +8,6 @@ public class Reader {
         lines = new ArrayList<>();
     }
 
-    // 读入源程序，并将源程序中的注释处理掉后返回数组
     public ArrayList<String> readLines() {
         String filePath = "./testfile.txt";
         File file = new File(filePath);
@@ -34,9 +33,9 @@ public class Reader {
         return lines;
     }
 
-    // 处理注释函数
     public void cleanNotes() {
         boolean isNote1 = false;
+        boolean isNote = false;
         boolean isNoteLines = false;
         boolean isString = false;
         boolean isNoteEnd1 = false;
@@ -50,54 +49,78 @@ public class Reader {
             char c;
             while (pos < line.length()) {
                 c = line.charAt(pos);
-                // 非注释或格式字符串的情况
-                if (!(isNoteLines || isString)) {
-                    // 如果已经读入一个'/'
+                if (!(isNote || isNoteLines || isString)) {
                     if (isNote1) {
                         isNote1 = false;
-                        if (c == '/') { // 为单行注释，直接处理
+                        if (c == '/') {
+                            isNote = true;
                             notePos = pos - 1;
-                            lines.set(noteLine, line.substring(0, notePos));
-                            notePos = -1;
-                            break;
-                        } else if (c == '*') { // 为多行注释，标记并记录当前位置，等待多行注释结束符
+                            noteLine = i;
+                        } else if (c == '*') {
                             isNoteLines = true;
                             notePos = pos - 1;
                             noteLine = i;
                         }
-                    } else if (c == '/') { // 读入了'/'，标记，等待下一个字符
+                    } else if (c == '/') {
                         isNote1 = true;
                     }
-                    if (c == '"') { // 格式化字符串标识符，标记，等待字符串结束
+                    if (c == '"') {
                         isString = true;
                     }
-                } else if (isNoteLines) { // 处理多行注释
-                    if (isNoteEnd1) { // 已经读入'*'，等待读入'/'
+                } else if (isNote) {
+                    lines.set(noteLine, lines.get(noteLine).substring(0, notePos));
+                    isNote = false;
+                    notePos = -1;
+                    if (noteLine == i) {
+                        noteLine = -1;
+                        break;
+                    }
+                    noteLine = -1;
+                } else if (isNoteLines) {
+                    if (isNoteEnd1) {
                         isNoteEnd1 = false;
-                        if (c == '/') { // 标志多行注释结束，对所有注释进行处理
+                        if (c == '/') {
                             isNoteLines = false;
                             noteEnd = pos + 1;
-                            if (noteLine == i) { // 如果在同一行，简单处理即可
-                                // TODO 可能会要求处理标识符中的多行字符这种error
+                            /*if (notePos != -1) {
                                 String s = line.substring(0, notePos) + " " + line.substring(noteEnd);
                                 lines.set(i, s);
-                            } else { // 不同行，需要一起处理
-                                lines.set(noteLine, lines.get(noteLine).substring(0, notePos));// 清除第一行
+                                notePos = -1;
+                            } else {
+                                lines.set(i, line.substring(noteEnd));
+                            }*/
+                            if (noteLine == i) {
+                                String s = line.substring(0, notePos) + " " + line.substring(noteEnd);
+                                lines.set(i, s);
+                                notePos = -1;
+                                noteEnd = -1;
+                            } else {
+                                lines.set(noteLine, lines.get(noteLine).substring(0, notePos));
                                 String s;
-                                for (int j = noteLine + 1; j < i; j++) {// 清除中间行
+                                for (int j = noteLine + 1; j < i; j++) {
                                     s = "";
                                     lines.set(j, s);
                                 }
-                                lines.set(i, line.substring(noteEnd));// 清除尾行
+                                lines.set(i, line.substring(noteEnd));
+                                notePos = -1;
+                                noteEnd = -1;
                             }
-                            notePos = -1;
-                            noteEnd = -1;
                             break;
                         }
                     }
-                    if (c == '*') {// 读入'*'
+                    if (c == '*') {
                         isNoteEnd1 = true;
                     }
+                    /*if (pos == line.length() - 1) {
+                        isNoteEnd1 = false;
+                        if (notePos != -1) {
+                            lines.set(i, line.substring(0, notePos));
+                            notePos = -1;
+                        } else {
+                            lines.set(i, "");
+                        }
+                        break;
+                    }*/
                 } else if (isString) {
                     if (c == '"') {
                         isString = false;
@@ -105,7 +128,7 @@ public class Reader {
                 }
                 pos++;
             }
-            isNote1 = false;// 防止换行被当作连续读入
+            isNote1 = false;
             isNoteEnd1 = false;
         }
     }

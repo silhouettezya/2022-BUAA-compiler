@@ -58,12 +58,11 @@ public class Lexer {
             while (pos < line.length()) {
                 clearToken();
                 getCurc();
-                // 这里仅处理空格与制表符，若有换行则标志到达了句子末尾，直接循环结束即可
                 while (curc == ' ' || curc == '\t') getCurc();
                 if (isLetter()) {
-                    while (isLetter() || isDigit()) { // 处理标识符与保留字
+                    while (isLetter() || isDigit()) {
                         catToken();
-                        getCurc(); //将字符拼接成字符串
+                        getCurc();//将字符拼接成字符串
                     }
                     retract();
                     buildIdent();
@@ -75,7 +74,7 @@ public class Lexer {
                     retract();
                     content = s.toString();
                     Type = "INTCON";
-                } else if (curc == '!') { // 处理单双符号
+                } else if (curc == '!') {
                     getCurc();
                     if (curc == '=') {
                         content = "!=";
@@ -133,7 +132,7 @@ public class Lexer {
                         content = "=";
                         Type = "ASSIGN";
                     }
-                } else if (curc == '"') { // 处理格式化字符串
+                } else if (curc == '"') {
                     catToken();
                     getCurc();
                     while (curc != '"') {
@@ -144,7 +143,7 @@ public class Lexer {
                     //TODO FormatString error
                     content = s.toString();
                     Type = "STRCON";
-                } else { // 处理单个字符
+                } else {
                     content = Character.toString(curc);
                     if (content2Type.containsKey(content)) {
                         Type = content2Type.get(content);
@@ -155,7 +154,6 @@ public class Lexer {
         }
     }
 
-    // 读取指针当前位置的符号并移动指针，若为末尾则返回'\n'
     public void getCurc() {
         if (pos >= line.length()) {
             curc = '\n';
@@ -165,30 +163,29 @@ public class Lexer {
         pos++;
     }
 
-    // 后退一个指针
     public void retract() {
         pos--;
     }
 
-    // 拼接字符串
     public void catToken() {
         s.append(curc);
     }
 
-    // 处理标识符与保留字
     public void buildIdent() {
         content = s.toString();
-        Type = content2Type.getOrDefault(content, "IDENFR");
+        if (content2Type.containsKey(content)) {
+            Type = content2Type.get(content);
+        } else {
+            Type = "IDENFR";
+        }
     }
 
-    // 清空上一个单词的情况
     public void clearToken() {
         s = new StringBuilder();
         Type = null;
         content = null;
     }
 
-    // 如果单词有效则向单词表中输出一个单词
     public void putToken() {
         if (Type != null) {
             Token word = new Token(Type, content, lineNumber);
