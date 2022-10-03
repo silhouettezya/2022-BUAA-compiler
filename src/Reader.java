@@ -35,7 +35,7 @@ public class Reader {
 
     public void cleanNotes() {
         boolean isNote1 = false;
-        boolean isNote = false;
+        //boolean isNote = false;
         boolean isNoteLines = false;
         boolean isString = false;
         boolean isNoteEnd1 = false;
@@ -49,13 +49,14 @@ public class Reader {
             char c;
             while (pos < line.length()) {
                 c = line.charAt(pos);
-                if (!(isNote || isNoteLines || isString)) {
+                if (!(isNoteLines || isString)) {
                     if (isNote1) {
                         isNote1 = false;
                         if (c == '/') {
-                            isNote = true;
                             notePos = pos - 1;
-                            noteLine = i;
+                            lines.set(i, line.substring(0, notePos));
+                            notePos = -1;
+                            break;
                         } else if (c == '*') {
                             isNoteLines = true;
                             notePos = pos - 1;
@@ -67,7 +68,7 @@ public class Reader {
                     if (c == '"') {
                         isString = true;
                     }
-                } else if (isNote) {
+                } /*else if (isNote) {
                     lines.set(noteLine, lines.get(noteLine).substring(0, notePos));
                     isNote = false;
                     notePos = -1;
@@ -76,7 +77,7 @@ public class Reader {
                         break;
                     }
                     noteLine = -1;
-                } else if (isNoteLines) {
+                }*/ else if (isNoteLines) {
                     if (isNoteEnd1) {
                         isNoteEnd1 = false;
                         if (c == '/') {
