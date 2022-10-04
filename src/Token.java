@@ -1,17 +1,17 @@
 import java.math.BigInteger;
 
 public class Token {
-    private String Type;
+    private TKtype Type;
     private String content;
     private int lineNumber;
 
-    public Token(String Type, String content, int lineNumber) {
+    public Token(TKtype Type, String content, int lineNumber) {
         this.Type = Type;
         this.content = content;
         this.lineNumber = lineNumber;
     }
 
-    public String getType() {
+    public TKtype getType() {
         return Type;
     }
 

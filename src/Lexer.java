@@ -13,35 +13,35 @@ public class Lexer {
     private char curc;
     private StringBuilder s;
     private String content;
-    private String Type;
+    private TKtype Type;
     private ArrayList<Token> tokenTable = new ArrayList<>();
-    private HashMap<String, String> content2Type = new HashMap<String, String>(){
+    private HashMap<String, TKtype> content2Type = new HashMap<String, TKtype>(){
         {
-            put("main", "MAINTK");
-            put("const", "CONSTTK");
-            put("int", "INTTK");
-            put("break", "BREAKTK");
-            put("continue", "CONTINUETK");
-            put("if", "IFTK");
-            put("else", "ELSETK");
-            put("while", "WHILETK");
-            put("getint", "GETINTTK");
-            put("printf", "PRINTFTK");
-            put("return", "RETURNTK");
-            put("void", "VOIDTK");
-            put("+", "PLUS");
-            put("-", "MINU");
-            put("*", "MULT");
-            put("/", "DIV");
-            put("%", "MOD");
-            put(";", "SEMICN");
-            put(",", "COMMA");
-            put("(", "LPARENT");
-            put(")", "RPARENT");
-            put("[", "LBRACK");
-            put("]", "RBRACK");
-            put("{", "LBRACE");
-            put("}", "RBRACE");
+            put("main", TKtype.MAINTK);
+            put("const", TKtype.CONSTTK);
+            put("int", TKtype.INTTK);
+            put("break", TKtype.BREAKTK);
+            put("continue", TKtype.CONTINUETK);
+            put("if", TKtype.IFTK);
+            put("else", TKtype.ELSETK);
+            put("while", TKtype.WHILETK);
+            put("getint", TKtype.GETINTTK);
+            put("printf", TKtype.PRINTFTK);
+            put("return", TKtype.RETURNTK);
+            put("void", TKtype.VOIDTK);
+            put("+", TKtype.PLUS);
+            put("-", TKtype.MINU);
+            put("*", TKtype.MULT);
+            put("/", TKtype.DIV);
+            put("%", TKtype.MOD);
+            put(";", TKtype.SEMICN);
+            put(",", TKtype.COMMA);
+            put("(", TKtype.LPARENT);
+            put(")", TKtype.RPARENT);
+            put("[", TKtype.LBRACK);
+            put("]", TKtype.RBRACK);
+            put("{", TKtype.LBRACE);
+            put("}", TKtype.RBRACE);
         }
     };
 
@@ -73,22 +73,22 @@ public class Lexer {
                     }
                     retract();
                     content = s.toString();
-                    Type = "INTCON";
+                    Type = TKtype.INTCON;
                 } else if (curc == '!') {
                     getCurc();
                     if (curc == '=') {
                         content = "!=";
-                        Type = "NEQ";
+                        Type = TKtype.NEQ;
                     } else {
                         retract();
                         content = "!";
-                        Type = "NOT";
+                        Type = TKtype.NOT;
                     }
                 } else if (curc == '&') {
                     getCurc();
                     if (curc == '&') {
                         content = "&&";
-                        Type = "AND";
+                        Type = TKtype.AND;
                     } else {
                         retract();
                         //TODO && error
@@ -97,7 +97,7 @@ public class Lexer {
                     getCurc();
                     if (curc == '|') {
                         content = "||";
-                        Type = "OR";
+                        Type = TKtype.OR;
                     } else {
                         retract();
                         //TODO || error
@@ -106,31 +106,31 @@ public class Lexer {
                     getCurc();
                     if (curc == '=') {
                         content = "<=";
-                        Type = "LEQ";
+                        Type = TKtype.LEQ;
                     } else {
                         retract();
                         content = "<";
-                        Type = "LSS";
+                        Type = TKtype.LSS;
                     }
                 } else if (curc == '>') {
                     getCurc();
                     if (curc == '=') {
                         content = ">=";
-                        Type = "GEQ";
+                        Type = TKtype.GEQ;
                     } else {
                         retract();
                         content = ">";
-                        Type = "GRE";
+                        Type = TKtype.GRE;
                     }
                 } else if (curc == '=') {
                     getCurc();
                     if (curc == '=') {
                         content = "==";
-                        Type = "EQL";
+                        Type = TKtype.EQL;
                     } else {
                         retract();
                         content = "=";
-                        Type = "ASSIGN";
+                        Type = TKtype.ASSIGN;
                     }
                 } else if (curc == '"') {
                     catToken();
@@ -142,7 +142,7 @@ public class Lexer {
                     catToken();
                     //TODO FormatString error
                     content = s.toString();
-                    Type = "STRCON";
+                    Type = TKtype.STRCON;
                 } else {
                     content = Character.toString(curc);
                     if (content2Type.containsKey(content)) {
@@ -176,7 +176,7 @@ public class Lexer {
         if (content2Type.containsKey(content)) {
             Type = content2Type.get(content);
         } else {
-            Type = "IDENFR";
+            Type = TKtype.IDENFR;
         }
     }
 
@@ -202,17 +202,12 @@ public class Lexer {
     }
 
     public void output() {
-        String filePath = "./output.txt";
-        File file = new File(filePath);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.setOut(new PrintStream(fos));
         for (Token token : tokenTable) {
-            System.out.println(token.getType() + ' ' + token.getContent());
+            System.out.println(token.getType() + " " + token.getContent());
         }
+    }
+
+    public ArrayList<Token> getTokenTable() {
+        return tokenTable;
     }
 }
