@@ -135,7 +135,7 @@ public class Lexer {
                 } else if (curc == '"') {
                     catToken();
                     getCurc();
-                    while (curc != '"') {
+                    while (curc != '"'  && curc != '\n') {
                         catToken();
                         getCurc();
                     }

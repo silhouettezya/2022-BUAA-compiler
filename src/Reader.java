@@ -68,28 +68,12 @@ public class Reader {
                     if (c == '"') {
                         isString = true;
                     }
-                } /*else if (isNote) {
-                    lines.set(noteLine, lines.get(noteLine).substring(0, notePos));
-                    isNote = false;
-                    notePos = -1;
-                    if (noteLine == i) {
-                        noteLine = -1;
-                        break;
-                    }
-                    noteLine = -1;
-                }*/ else if (isNoteLines) {
+                } else if (isNoteLines) {
                     if (isNoteEnd1) {
                         isNoteEnd1 = false;
                         if (c == '/') {
                             isNoteLines = false;
                             noteEnd = pos + 1;
-                            /*if (notePos != -1) {
-                                String s = line.substring(0, notePos) + " " + line.substring(noteEnd);
-                                lines.set(i, s);
-                                notePos = -1;
-                            } else {
-                                lines.set(i, line.substring(noteEnd));
-                            }*/
                             if (noteLine == i) {
                                 String s = line.substring(0, notePos) + " " + line.substring(noteEnd);
                                 lines.set(i, s);
@@ -106,22 +90,14 @@ public class Reader {
                                 notePos = -1;
                                 noteEnd = -1;
                             }
-                            break;
+                            line = lines.get(i);
+                            pos = -1;
+                        } else if (c == '*') {
+                            isNoteEnd1 = true;
                         }
-                    }
-                    if (c == '*') {
+                    } else if (c == '*') {
                         isNoteEnd1 = true;
                     }
-                    /*if (pos == line.length() - 1) {
-                        isNoteEnd1 = false;
-                        if (notePos != -1) {
-                            lines.set(i, line.substring(0, notePos));
-                            notePos = -1;
-                        } else {
-                            lines.set(i, "");
-                        }
-                        break;
-                    }*/
                 } else if (isString) {
                     if (c == '"') {
                         isString = false;
