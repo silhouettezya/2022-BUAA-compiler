@@ -203,7 +203,7 @@ public class Lexer {
 
     public void output() {
         for (Token token : tokenTable) {
-            System.out.println(token.getType() + " " + token.getContent());
+            System.out.println(token);
         }
     }
 

@@ -1,9 +1,9 @@
 import java.math.BigInteger;
 
 public class Token {
-    private TKtype Type;
-    private String content;
-    private int lineNumber;
+    public TKtype Type;
+    public String content;
+    public int lineNumber;
 
     public Token(TKtype Type, String content, int lineNumber) {
         this.Type = Type;
@@ -21,5 +21,9 @@ public class Token {
 
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    public String toString() {
+        return Type + " " + content;
     }
 }

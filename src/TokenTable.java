@@ -7,16 +7,15 @@ public class TokenTable {
 
     public TokenTable(ArrayList<Token> tokenTable) {
         this.tokenTable = tokenTable;
-        this.pos = 0;
+        this.pos = -1;
     }
 
     public Token getCurToken() {
-        if (pos >= 0 && pos < tokenTable.size()) {
-            curToken = tokenTable.get(pos);
+        if (pos >= -1 && pos < tokenTable.size() - 1) {
+            curToken = tokenTable.get(++pos);
         } else {
             curToken = null;
         }
-        pos++;
         return curToken;
     }
 

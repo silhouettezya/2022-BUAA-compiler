@@ -17,8 +17,8 @@ public class Compiler {
         System.setOut(new PrintStream(fos));
         Reader reader = new Reader();
         Lexer lexer = new Lexer(reader.readLines());
-        lexer.output();
-        //TokenTable tokenTable = new TokenTable(lexer.getTokenTable());
-
+        //lexer.output();
+        TokenTable tokenTable = new TokenTable(lexer.getTokenTable());
+        Paser paser = new Paser(tokenTable);
     }
 }
