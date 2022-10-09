@@ -547,7 +547,7 @@ public class Paser {
             if (curType() == TKtype.RPARENT) {
                 addEndUnit(units);
             } else {
-                curUnit = FuncFParams();
+                curUnit = FuncRParams();
                 units.add(curUnit);
                 if (curType() == TKtype.RPARENT) {
                     addEndUnit(units);
