@@ -367,6 +367,7 @@ public class Paser {
                 }
             }
         } else if (curType() == TKtype.WHILETK) {
+            addEndUnit(units);
             if (curType() == TKtype.LPARENT) {
                 addEndUnit(units);
                 curUnit = Cond();
