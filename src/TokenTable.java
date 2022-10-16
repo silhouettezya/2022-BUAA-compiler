@@ -10,6 +10,7 @@ public class TokenTable {
         this.pos = -1;
     }
 
+    // 为了和readToken统一，curToken保存的是当前pos的Token
     public Token getCurToken() {
         if (pos >= -1 && pos < tokenTable.size() - 1) {
             curToken = tokenTable.get(++pos);
@@ -23,6 +24,7 @@ public class TokenTable {
         pos--;
     }
 
+    // i表示距离当前pos为i的位置
     public Token readToken(int i) {
         if (pos + i >= 0 && pos + i < tokenTable.size()) {
             return tokenTable.get(pos + i);
