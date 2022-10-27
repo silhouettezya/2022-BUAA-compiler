@@ -78,7 +78,7 @@ public class Paser {
                 if (curType() == TKtype.SEMICN) {
                     addEndUnit(units);
                 } else {
-                    semicnError(units);
+                    SEMICNError(units);
                 }
             }
         }
@@ -98,6 +98,8 @@ public class Paser {
                 units.add(curUnit);
                 if (curType() == TKtype.RBRACK) {
                     addEndUnit(units);
+                } else {
+                    RBRACKError(units);
                 }
                 times++;
             }
@@ -153,7 +155,7 @@ public class Paser {
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
             } else {
-                semicnError(units);
+                SEMICNError(units);
             }
         }
         finPaser(tp);
@@ -172,6 +174,8 @@ public class Paser {
                 units.add(curUnit);
                 if (curType() == TKtype.RBRACK) {
                     addEndUnit(units);
+                } else {
+                    RBRACKError(units);
                 }
                 times++;
             }
@@ -229,9 +233,11 @@ public class Paser {
                     units.add(curUnit);
                     if (curType() == TKtype.RPARENT) {
                         addEndUnit(units);
+                    } else {
+                        RPARENTError(units);
                     }
                 } else {
-
+                    RPARENTError(units);
                 }
                 curUnit = Block();
                 units.add(curUnit);
@@ -253,9 +259,11 @@ public class Paser {
                     addEndUnit(units);
                     if (curType() == TKtype.RPARENT) {
                         addEndUnit(units);
-                        curUnit = Block();
-                        units.add(curUnit);
+                    } else {
+                        RPARENTError(units);
                     }
+                    curUnit = Block();
+                    units.add(curUnit);
                 }
             }
         }
@@ -300,13 +308,17 @@ public class Paser {
                     addEndUnit(units);
                     if (curType() == TKtype.RBRACK) {
                         addEndUnit(units);
-                        if (curType() == TKtype.LBRACK) {
+                    } else {
+                        RBRACKError(units);
+                    }
+                    if (curType() == TKtype.LBRACK) {
+                        addEndUnit(units);
+                        curUnit = ConstExp();
+                        units.add(curUnit);
+                        if (curType() == TKtype.RBRACK) {
                             addEndUnit(units);
-                            curUnit = ConstExp();
-                            units.add(curUnit);
-                            if (curType() == TKtype.RBRACK) {
-                                addEndUnit(units);
-                            }
+                        } else {
+                            RBRACKError(units);
                         }
                     }
                 }
@@ -360,13 +372,15 @@ public class Paser {
                 units.add(curUnit);
                 if (curType() == TKtype.RPARENT) {
                     addEndUnit(units);
+                } else {
+                    RPARENTError(units);
+                }
+                curUnit = Stmt();
+                units.add(curUnit);
+                if (curType() == TKtype.ELSETK) {
+                    addEndUnit(units);
                     curUnit = Stmt();
                     units.add(curUnit);
-                    if (curType() == TKtype.ELSETK) {
-                        addEndUnit(units);
-                        curUnit = Stmt();
-                        units.add(curUnit);
-                    }
                 }
             }
         } else if (curType() == TKtype.WHILETK) {
@@ -376,23 +390,25 @@ public class Paser {
                 curUnit = Cond();
                 if (curType() == TKtype.RPARENT) {
                     addEndUnit(units);
-                    curUnit = Stmt();
-                    units.add(curUnit);
+                } else {
+                    RPARENTError(units);
                 }
+                curUnit = Stmt();
+                units.add(curUnit);
             }
         } else if (curType() == TKtype.BREAKTK) {
             addEndUnit(units);
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
             } else {
-                semicnError(units);
+                SEMICNError(units);
             }
         } else if (curType() == TKtype.CONTINUETK) {
             addEndUnit(units);
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
             } else {
-                semicnError(units);
+                SEMICNError(units);
             }
         } else if (curType() == TKtype.RETURNTK) {
             addEndUnit(units);
@@ -405,10 +421,10 @@ public class Paser {
                 if (curType() == TKtype.SEMICN) {
                     addEndUnit(units);
                 } else {
-                    semicnError(units);
+                    SEMICNError(units);
                 }
             } else {
-                semicnError(units);
+                SEMICNError(units);
             }
         } else if (curType() == TKtype.PRINTFTK) {
             addEndUnit(units);
@@ -422,13 +438,14 @@ public class Paser {
                         units.add(curUnit);
                     }
                     if (curType() == TKtype.RPARENT) {
-
                         addEndUnit(units);
-                        if (curType() == TKtype.SEMICN) {
-                            addEndUnit(units);
-                        } else {
-                            semicnError(units);
-                        }
+                    } else {
+                        RPARENTError(units);
+                    }
+                    if (curType() == TKtype.SEMICN) {
+                        addEndUnit(units);
+                    } else {
+                        SEMICNError(units);
                     }
                 }
             }
@@ -454,6 +471,8 @@ public class Paser {
                             addEndUnit(units);
                             if (curType() == TKtype.RPARENT) {
                                 addEndUnit(units);
+                            } else {
+                                RPARENTError(units);
                             }
                         }
                     } else {
@@ -463,7 +482,7 @@ public class Paser {
                     if (curType() == TKtype.SEMICN) {
                         addEndUnit(units);
                     } else {
-                        semicnError(units);
+                        SEMICNError(units);
                     }
                 }
             } else {
@@ -472,7 +491,7 @@ public class Paser {
                 if (curType() == TKtype.SEMICN) {
                     addEndUnit(units);
                 } else {
-                    semicnError(units);
+                    SEMICNError(units);
                 }
             }
         } else if (curType() == TKtype.SEMICN) {
@@ -483,7 +502,7 @@ public class Paser {
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
             } else {
-                semicnError(units);
+                SEMICNError(units);
             }
         }
         finPaser(tp);
@@ -520,6 +539,8 @@ public class Paser {
                 units.add(curUnit);
                 if (curType() == TKtype.RBRACK) {
                     addEndUnit(units);
+                } else {
+                    RBRACKError(units);
                 }
                 times++;
             }
@@ -537,6 +558,8 @@ public class Paser {
             units.add(curUnit);
             if (curType() == TKtype.RPARENT) {
                 addEndUnit(units);
+            } else {
+                RPARENTError(units);
             }
         } else if (curType() == TKtype.INTCON) {
             curUnit = Number();
@@ -567,12 +590,17 @@ public class Paser {
             addEndUnit(units);
             if (curType() == TKtype.RPARENT) {
                 addEndUnit(units);
-            } else {
+            } else if (curType() == TKtype.IDENFR || curType() == TKtype.PLUS || curType() == TKtype.MINU
+                || curType() == TKtype.LPARENT || curType() == TKtype.INTCON) {
                 curUnit = FuncRParams();
                 units.add(curUnit);
                 if (curType() == TKtype.RPARENT) {
                     addEndUnit(units);
+                } else {
+                    RPARENTError(units);
                 }
+            } else {
+                RPARENTError(units);
             }
         } else if (curType() == TKtype.PLUS || curType() == TKtype.MINU || curType() == TKtype.NOT) {
             curUnit = UnaryOp();
@@ -756,9 +784,21 @@ public class Paser {
         }
     }
 
-    public void semicnError(ArrayList<PaserUnit> units) {
+    public void SEMICNError(ArrayList<PaserUnit> units) {
         int lineNumber = units.get(units.size() - 1).getLastLineNumber();
         errorTable.getInstance().addError(lineNumber, 'i');
         units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
+    }
+
+    public void RPARENTError(ArrayList<PaserUnit> units) {
+        int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+        errorTable.getInstance().addError(lineNumber, 'j');
+        units.add(new PaserUnit(new Token(TKtype.RPARENT, ")", lineNumber)));
+    }
+
+    public void RBRACKError(ArrayList<PaserUnit> units) {
+        int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+        errorTable.getInstance().addError(lineNumber, 'k');
+        units.add(new PaserUnit(new Token(TKtype.RBRACK, "]", lineNumber)));
     }
 }
