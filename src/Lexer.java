@@ -55,7 +55,7 @@ public class Lexer {
                 clearToken();
                 getCurc();
                 while (curc == ' ' || curc == '\t') getCurc();
-                if (isLetter()) {
+                if (isLetter()) {//字符开头，表明是标识符或保留字
                     while (isLetter() || isDigit()) {
                         catToken();
                         getCurc();//将字符拼接成字符串
@@ -131,12 +131,29 @@ public class Lexer {
                 } else if (curc == '"') {
                     catToken();
                     getCurc();
+                    boolean isWrong = false;
+                    boolean is92 = false;
                     while (curc != '"'  && curc != '\n') {
+                        if ((curc >= 32 && curc <= 33) || (curc >= 40 && curc <=126)) {
+                            if (is92 && curc != 'n') {
+                                isWrong = true;
+                            } else {
+                                is92 = false;
+                            }
+                            if (curc == 92) {
+                                is92 = true;
+                            }
+                        } else {
+                            isWrong = true;
+                        }
                         catToken();
                         getCurc();
                     }
                     catToken();
                     //TODO FormatString error
+                    if (isWrong) {
+                        errorTable.getInstance().addError(lineNumber, 'a');
+                    }
                     content = s.toString();
                     Type = TKtype.STRCON;
                 } else {
@@ -163,10 +180,12 @@ public class Lexer {
         pos--;
     }
 
+    //向s中存入一个字符
     public void catToken() {
         s.append(curc);
     }
 
+    //判断是标识符还是保留字
     public void buildIdent() {
         content = s.toString();
         if (content2Type.containsKey(content)) {
@@ -182,6 +201,7 @@ public class Lexer {
         content = null;
     }
 
+    //输出token到单词表中
     public void putToken() {
         if (Type != null) {
             Token word = new Token(Type, content, lineNumber);

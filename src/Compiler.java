@@ -14,6 +14,9 @@ public class Compiler {
             e.printStackTrace();
         }
         System.setOut(new PrintStream(fos));
+
+        errorTable.getInstance().initial();
+
         Reader reader = new Reader();
         Lexer lexer = new Lexer(reader.readLines());
         //lexer.output();

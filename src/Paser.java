@@ -32,10 +32,7 @@ public class Paser {
         token = table.getCurToken();
         while (curType() == TKtype.CONSTTK ||
                 (curType() == TKtype.INTTK && getType(1) == TKtype.IDENFR
-                && (getType(2) == TKtype.LBRACK
-                        || getType(2) == TKtype.ASSIGN
-                || getType(2) == TKtype.SEMICN
-                || getType(2) == TKtype.COMMA))) {
+                && (getType(2) != TKtype.LPARENT))) {
             curUnit = Decl();
             units.add(curUnit);
         }
@@ -80,6 +77,10 @@ public class Paser {
                 }
                 if (curType() == TKtype.SEMICN) {
                     addEndUnit(units);
+                } else {
+                    int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                    errorTable.getInstance().addError(lineNumber, 'i');
+                    units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
                 }
             }
         }
@@ -153,6 +154,10 @@ public class Paser {
             }
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
+            } else {
+                int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                errorTable.getInstance().addError(lineNumber, 'i');
+                units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
             }
         }
         finPaser(tp);
@@ -381,22 +386,39 @@ public class Paser {
             addEndUnit(units);
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
+            } else {
+                int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                errorTable.getInstance().addError(lineNumber, 'i');
+                units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
             }
         } else if (curType() == TKtype.CONTINUETK) {
             addEndUnit(units);
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
+            } else {
+                int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                errorTable.getInstance().addError(lineNumber, 'i');
+                units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
             }
         } else if (curType() == TKtype.RETURNTK) {
             addEndUnit(units);
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
-            } else {
+            } else if (curType() == TKtype.IDENFR || curType() == TKtype.PLUS || curType() == TKtype.NOT ||
+                    curType() == TKtype.MINU || curType() == TKtype.LPARENT || curType() == TKtype.INTCON) {
                 curUnit = Exp();
                 units.add(curUnit);
                 if (curType() == TKtype.SEMICN) {
                     addEndUnit(units);
+                } else {
+                    int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                    errorTable.getInstance().addError(lineNumber, 'i');
+                    units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
                 }
+            } else {
+                int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                errorTable.getInstance().addError(lineNumber, 'i');
+                units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
             }
         } else if (curType() == TKtype.PRINTFTK) {
             addEndUnit(units);
@@ -414,14 +436,19 @@ public class Paser {
                         addEndUnit(units);
                         if (curType() == TKtype.SEMICN) {
                             addEndUnit(units);
+                        } else {
+                            int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                            errorTable.getInstance().addError(lineNumber, 'i');
+                            units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
                         }
                     }
                 }
             }
         } else if (curType() == TKtype.IDENFR) {
             int i = 1;
+            int line = token.lineNumber;
             boolean isExp = true;
-            while (getType(i) != TKtype.SEMICN && getType(i) != null) {
+            while (getType(i) != TKtype.SEMICN && getLineNumber(i) == line) {
                 if (getType(i) == TKtype.ASSIGN) {
                     isExp = false;
                     break;
@@ -447,6 +474,10 @@ public class Paser {
                     }
                     if (curType() == TKtype.SEMICN) {
                         addEndUnit(units);
+                    } else {
+                        int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                        errorTable.getInstance().addError(lineNumber, 'i');
+                        units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
                     }
                 }
             } else {
@@ -454,6 +485,10 @@ public class Paser {
                 units.add(curUnit);
                 if (curType() == TKtype.SEMICN) {
                     addEndUnit(units);
+                } else {
+                    int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                    errorTable.getInstance().addError(lineNumber, 'i');
+                    units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
                 }
             }
         } else if (curType() == TKtype.SEMICN) {
@@ -463,6 +498,10 @@ public class Paser {
             units.add(curUnit);
             if (curType() == TKtype.SEMICN) {
                 addEndUnit(units);
+            } else {
+                int lineNumber = units.get(units.size() - 1).getLastLineNumber();
+                errorTable.getInstance().addError(lineNumber, 'i');
+                units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
             }
         }
         finPaser(tp);
@@ -725,6 +764,13 @@ public class Paser {
         } else {
             return null;
         }
+    }
 
+    public int getLineNumber(int i) {
+        if (table.readToken(i) != null) {
+            return table.readToken(i).lineNumber;
+        } else {
+            return -1;
+        }
     }
 }

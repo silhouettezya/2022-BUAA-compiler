@@ -36,5 +36,5 @@ public enum TKtype {
     LBRACK,
     RBRACK,
     LBRACE,
-    RBRACE;
+    RBRACE
 }

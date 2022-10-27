@@ -16,4 +16,12 @@ public class PaserUnit {
         this.isEnd = true;
         this.token = token;
     }
+
+    public int getLastLineNumber() {
+        if (isEnd) {
+            return token.getLineNumber();
+        } else {
+            return units.get(units.size() - 1).getLastLineNumber();
+        }
+    }
 }
