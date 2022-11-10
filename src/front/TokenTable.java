@@ -1,3 +1,5 @@
+package front;
+
 import java.util.ArrayList;
 
 public class TokenTable {

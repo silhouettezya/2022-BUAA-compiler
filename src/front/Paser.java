@@ -1,3 +1,7 @@
+package front;
+
+import error.ErrorTable;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -786,19 +790,19 @@ public class Paser {
 
     public void SEMICNError(ArrayList<PaserUnit> units) {
         int lineNumber = units.get(units.size() - 1).getLastLineNumber();
-        errorTable.getInstance().addError(lineNumber, 'i');
+        ErrorTable.getInstance().addError(lineNumber, 'i');
         units.add(new PaserUnit(new Token(TKtype.SEMICN, ";", lineNumber)));
     }
 
     public void RPARENTError(ArrayList<PaserUnit> units) {
         int lineNumber = units.get(units.size() - 1).getLastLineNumber();
-        errorTable.getInstance().addError(lineNumber, 'j');
+        ErrorTable.getInstance().addError(lineNumber, 'j');
         units.add(new PaserUnit(new Token(TKtype.RPARENT, ")", lineNumber)));
     }
 
     public void RBRACKError(ArrayList<PaserUnit> units) {
         int lineNumber = units.get(units.size() - 1).getLastLineNumber();
-        errorTable.getInstance().addError(lineNumber, 'k');
+        ErrorTable.getInstance().addError(lineNumber, 'k');
         units.add(new PaserUnit(new Token(TKtype.RBRACK, "]", lineNumber)));
     }
 }

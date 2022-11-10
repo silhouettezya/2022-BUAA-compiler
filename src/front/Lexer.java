@@ -1,3 +1,7 @@
+package front;
+
+import error.ErrorTable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -152,7 +156,7 @@ public class Lexer {
                     catToken();
                     //TODO FormatString error
                     if (isWrong) {
-                        errorTable.getInstance().addError(lineNumber, 'a');
+                        ErrorTable.getInstance().addError(lineNumber, 'a');
                     }
                     content = s.toString();
                     Type = TKtype.STRCON;

@@ -1,11 +1,13 @@
+package error;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class errorTable {
-    private static final errorTable errorTable = new errorTable();
+public class ErrorTable {
+    private static final ErrorTable errorTable = new ErrorTable();
     private ArrayList<error> errors;
 
-    public static errorTable getInstance() {
+    public static ErrorTable getInstance() {
         return errorTable;
     }
 

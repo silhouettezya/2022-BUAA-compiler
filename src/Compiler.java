@@ -1,3 +1,5 @@
+import front.*;
+import error.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,7 +17,7 @@ public class Compiler {
         }
         System.setOut(new PrintStream(fos));
 
-        errorTable.getInstance().initial();
+        ErrorTable.getInstance().initial();
 
         Reader reader = new Reader();
         Lexer lexer = new Lexer(reader.readLines());

@@ -1,3 +1,5 @@
+package error;
+
 public class error implements Comparable<error>{
     /*public enum type {
         a,//wrong char, lexer

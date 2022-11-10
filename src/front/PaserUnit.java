@@ -1,3 +1,5 @@
+package front;
+
 import java.util.ArrayList;
 
 public class PaserUnit {
@@ -23,5 +25,27 @@ public class PaserUnit {
         } else {
             return units.get(units.size() - 1).getLastLineNumber();
         }
+    }
+
+    public ArrayList<PaserUnit> getUnits() {
+        return units;
+    }
+
+    public String getType() {
+        if (!isEnd) {
+            return Type;
+        } else if (token.getType() == TKtype.IDENFR) {
+            return "Ident";
+        } else if (token.getType() == TKtype.STRCON) {
+            return "Strcon";
+        } else if (token.getType() == TKtype.INTCON) {
+            return "Intcon";
+        } else {
+            return token.content;
+        }
+    }
+
+    public String getName() {
+        return token.content;
     }
 }

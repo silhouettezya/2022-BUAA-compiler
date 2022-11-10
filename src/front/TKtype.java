@@ -1,3 +1,5 @@
+package front;
+
 public enum TKtype {
     IDENFR,
     INTCON,

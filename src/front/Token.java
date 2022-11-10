@@ -1,3 +1,4 @@
+package front;
 
 public class Token {
     public TKtype Type;
@@ -24,5 +25,9 @@ public class Token {
 
     public String toString() {
         return Type + " " + content;
+    }
+
+    public int getNum() {
+        return Integer.parseInt(content);
     }
 }
