@@ -15,7 +15,7 @@ public class Symbol implements Operand {
     private List<Integer> constDim1Value;
     private List<List<Integer>> constDim2Value;
     private boolean local; // 是否为局部变量，如果是则基地址为当前运行栈栈底；如果否则基地址为全局空间头部
-    private int address = 0; // 相对基地址的位移
+    private int address = -1; // 相对基地址的位移
     private boolean isConst;
     private List<Integer> dimSize;    // 每一维的长度，如果是指针则少一维
     private List<Integer> dimBase;    // dimSize 的后缀积
@@ -231,5 +231,11 @@ public class Symbol implements Operand {
         }
         Collections.reverse(suffix); // 依次保存了二维数组大小空间，第二维的一维数组大小空间，整数大小空间
         return suffix;
+    }
+
+    @Override
+    public String toString() {
+        String address = !hasAddress() ? "(tmp)" : String.format(isLocal() ? "@[sp-0x%x]" : "@[data+0x%x]", getAddress());
+        return name + address + ":" + type;
     }
 }

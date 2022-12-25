@@ -46,17 +46,14 @@ public class Compiler {
         if (Objects.isNull(ir)) {
             return;
         }
-        new PrintfTrans().optimize(ir); // NECESSARY transformer! This is NOT an optimizer.
+        new PrintfTrans().optimize(ir);
 
         new RemoveAfterJump().optimize(ir);
         new MergeBlock().optimize(ir);
         new MulDivOpt().optimize(ir);
 
         Mips mips = new Translator(ir).toMips();;
-
-        /* ------ Mips Optimize Begin ------ */
         new JumpFollow().optimize(mips);
-        /* ------ Mips Optimize End ------ */
 
         mips.output();
     }

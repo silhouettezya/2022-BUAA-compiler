@@ -92,7 +92,7 @@ public class PaserUnit {
         PaserUnit unit = this;
         while (unit.units.get(0).getType().equals("UnaryOp")) {
             ops.add(unit.units.get(0).units.get(0));
-            unit = units.get(1);
+            unit = unit.units.get(1);
         }
         return ops;
     }
