@@ -137,8 +137,9 @@ public class Lexer {
                     getCurc();
                     boolean isWrong = false;
                     boolean is92 = false;
+                    boolean is37 = false;
                     while (curc != '"'  && curc != '\n') {
-                        if ((curc >= 32 && curc <= 33) || (curc >= 40 && curc <=126)) {
+                        if ((curc >= 32 && curc <= 33) || (curc >= 40 && curc <=126) || (curc == 37)) {
                             if (is92 && curc != 'n') {
                                 isWrong = true;
                             } else {
@@ -147,14 +148,22 @@ public class Lexer {
                             if (curc == 92) {
                                 is92 = true;
                             }
+                            if (is37 && curc != 'd') {
+                                isWrong = true;
+                            } else {
+                                is37 = false;
+                            }
+                            if (curc == 37) {
+                                is37 = true;
+                            }
                         } else {
-                            isWrong = true;
-                        }
-                        if (is92) {
                             isWrong = true;
                         }
                         catToken();
                         getCurc();
+                    }
+                    if (is92 || is37) {
+                        isWrong = true;
                     }
                     catToken();
                     //TODO FormatString error
