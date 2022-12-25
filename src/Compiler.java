@@ -1,6 +1,6 @@
-import backend.Mips;
-import backend.Translator;
-import backend.optimize.JumpFollow;
+import back.Mips;
+import back.Translator;
+import back.optimize.JumpFollow;
 import front.*;
 import error.*;
 import middle.IRBuilder;
@@ -48,11 +48,9 @@ public class Compiler {
         }
         new PrintfTrans().optimize(ir); // NECESSARY transformer! This is NOT an optimizer.
 
-        /* ------ MidCode Optimize Begin ------ */
         new RemoveAfterJump().optimize(ir);
         new MergeBlock().optimize(ir);
         new MulDivOpt().optimize(ir);
-        /* ------ MidCode Optimize End ------ */
 
         Mips mips = new Translator(ir).toMips();;
 
