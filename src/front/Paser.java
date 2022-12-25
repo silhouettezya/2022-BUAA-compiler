@@ -399,6 +399,7 @@ public class Paser {
             if (curType() == TKtype.LPARENT) {
                 addEndUnit(units);
                 curUnit = Cond();
+                units.add(curUnit);
                 if (curType() == TKtype.RPARENT) {
                     addEndUnit(units);
                 } else {

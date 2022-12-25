@@ -209,6 +209,14 @@ public class Symbol implements Operand {
         return dimSize;
     }
 
+    public boolean isLocal() {
+        return local;
+    }
+
+    public boolean hasAddress() {
+        return this.address >= 0;
+    }
+
     private ArrayList<Integer> suffixProduct(List<Integer> list, int basicSize, boolean pointer) {
         ArrayList<Integer> suffix = new ArrayList<>();
         int prod = basicSize;
