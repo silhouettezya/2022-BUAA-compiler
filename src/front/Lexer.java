@@ -150,6 +150,9 @@ public class Lexer {
                         } else {
                             isWrong = true;
                         }
+                        if (is92) {
+                            isWrong = true;
+                        }
                         catToken();
                         getCurc();
                     }

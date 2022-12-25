@@ -224,7 +224,7 @@ public class IRBuilder {
             return;
         }
 
-        if (units.get(1).getType().equals("[")) { // 是数组
+        if (units.size() > 1 && units.get(1).getType().equals("[")) { // 是数组
             ArrayList<Integer> dims = new ArrayList<>(); // 计算数组每个维度大小
             for (PaserUnit unit : units) {
                 if (unit.getType().equals("ConstExp")) {

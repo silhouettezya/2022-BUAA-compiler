@@ -42,7 +42,7 @@ public class CalcUtil {
 
     public int calcMulExp(PaserUnit mulExp) {
         ArrayList<PaserUnit> units = mulExp.getUnits();
-        int result = calcMulExp(units.get(0));
+        int result = calcUnaryExp(units.get(0));
         for (int i = 1; i < units.size(); i = i + 2) {
             PaserUnit op = units.get(i);
             PaserUnit unaryExp = units.get(i + 1);

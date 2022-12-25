@@ -31,6 +31,10 @@ public class Paser {
         compUnit = CompUnit();
     }
 
+    public PaserUnit getCompUnit() {
+        return compUnit;
+    }
+
     public PaserUnit CompUnit() {
         ArrayList<PaserUnit> units = new ArrayList<>();
         token = table.getCurToken();
@@ -774,13 +778,13 @@ public class Paser {
     }
 
     private void addEndUnit(ArrayList<PaserUnit> units) {
-        System.out.println(token);
+        // System.out.println(token);
         units.add(new PaserUnit(token));
         token = table.getCurToken();
     }
 
     private void finPaser(String Type) {
-        System.out.println("<" + Type + ">");
+        // System.out.println("<" + Type + ">");
     }
 
     public TKtype curType() {
