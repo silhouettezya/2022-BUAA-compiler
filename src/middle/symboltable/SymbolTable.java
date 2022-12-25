@@ -1,6 +1,7 @@
 package middle.symboltable;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SymbolTable {
     private SymbolTable father;
@@ -49,5 +50,16 @@ public class SymbolTable {
 
     public SymbolTable getFather() {
         return father;
+    }
+
+    public boolean contains(String name, boolean recursive) {
+        if (map.containsKey(name)) {
+            return true;
+        } else {
+            if (father != null && recursive) {
+                return father.contains(name, true);
+            }
+            return false;
+        }
     }
 }

@@ -57,7 +57,7 @@ public class FuncInfo {
     }
 
     public List<Symbol> getParams() {
-        return Collections.unmodifiableList(params);
+        return params;
     }
 
     public void addParam(Symbol param) {

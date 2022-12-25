@@ -7,6 +7,8 @@ public class PaserUnit {
     private Token token;
     private String Type;
     private ArrayList<PaserUnit> units;
+    private String StmtType;
+    private String PrimaryExpType;
 
     public PaserUnit(String Type, ArrayList<PaserUnit> units) {
         this.isEnd = false;
@@ -17,6 +19,13 @@ public class PaserUnit {
     public PaserUnit(Token token) {
         this.isEnd = true;
         this.token = token;
+    }
+
+    public PaserUnit(String Type, ArrayList<PaserUnit> units, String StmtType) {
+        this.isEnd = false;
+        this.Type = Type;
+        this.units = units;
+        this.StmtType = StmtType;
     }
 
     public int getLastLineNumber() {
@@ -45,7 +54,46 @@ public class PaserUnit {
         }
     }
 
+    public String getFormatStringInner() {
+        return token.content.substring(1, (token.content.length()) -1);
+    }
+
+    public String getStmtType() {
+        return StmtType;
+    }
+
+    public void setPrimaryExpType(String type) {
+        this.PrimaryExpType = type;
+    }
+
+    public String getPrimaryExpType() {
+        return PrimaryExpType;
+    }
+
     public String getName() {
         return token.content;
+    }
+
+    public int getNum() {
+        return token.getNum();
+    }
+
+    public PaserUnit getBaseUnaryExp() {
+        if (units.get(0).getType().equals("UnaryOp")) {
+            return units.get(1).getBaseUnaryExp();
+        } else {
+            PaserUnit paserUnit = this;
+            return paserUnit;
+        }
+    }
+
+    public ArrayList<PaserUnit> getUnaryOp() {
+        ArrayList<PaserUnit> ops = new ArrayList<>();
+        PaserUnit unit = this;
+        while (unit.units.get(0).getType().equals("UnaryOp")) {
+            ops.add(unit.units.get(0).units.get(0));
+            unit = units.get(1);
+        }
+        return ops;
     }
 }

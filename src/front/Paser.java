@@ -365,9 +365,11 @@ public class Paser {
     public PaserUnit Stmt() {
         ArrayList<PaserUnit> units = new ArrayList<>();
         String tp = "Stmt";
+        String stmtType = "Wrong";
         if (curType() == TKtype.LBRACE) {
             curUnit = Block();
             units.add(curUnit);
+            stmtType = "Block";
         } else if (curType() == TKtype.IFTK) {
             addEndUnit(units);
             if (curType() == TKtype.LPARENT) {
@@ -387,6 +389,7 @@ public class Paser {
                     units.add(curUnit);
                 }
             }
+            stmtType = "If";
         } else if (curType() == TKtype.WHILETK) {
             addEndUnit(units);
             if (curType() == TKtype.LPARENT) {
@@ -400,6 +403,7 @@ public class Paser {
                 curUnit = Stmt();
                 units.add(curUnit);
             }
+            stmtType = "While";
         } else if (curType() == TKtype.BREAKTK) {
             addEndUnit(units);
             if (curType() == TKtype.SEMICN) {
@@ -407,6 +411,7 @@ public class Paser {
             } else {
                 SEMICNError(units);
             }
+            stmtType = "Break";
         } else if (curType() == TKtype.CONTINUETK) {
             addEndUnit(units);
             if (curType() == TKtype.SEMICN) {
@@ -414,6 +419,7 @@ public class Paser {
             } else {
                 SEMICNError(units);
             }
+            stmtType = "Continue";
         } else if (curType() == TKtype.RETURNTK) {
             addEndUnit(units);
             if (curType() == TKtype.SEMICN) {
@@ -430,6 +436,7 @@ public class Paser {
             } else {
                 SEMICNError(units);
             }
+            stmtType = "Return";
         } else if (curType() == TKtype.PRINTFTK) {
             addEndUnit(units);
             if (curType() == TKtype.LPARENT) {
@@ -453,6 +460,7 @@ public class Paser {
                     }
                 }
             }
+            stmtType = "Printf";
         } else if (curType() == TKtype.IDENFR) {
             int i = 1;
             int line = token.lineNumber;
@@ -479,9 +487,11 @@ public class Paser {
                                 RPARENTError(units);
                             }
                         }
+                        stmtType = "Getint";
                     } else {
                         curUnit = Exp();
                         units.add(curUnit);
+                        stmtType = "Assign";
                     }
                     if (curType() == TKtype.SEMICN) {
                         addEndUnit(units);
@@ -497,9 +507,11 @@ public class Paser {
                 } else {
                     SEMICNError(units);
                 }
+                stmtType = "Exp";
             }
         } else if (curType() == TKtype.SEMICN) {
             addEndUnit(units);
+            stmtType = "Null";
         } else {
             curUnit = Exp();
             units.add(curUnit);
@@ -508,9 +520,10 @@ public class Paser {
             } else {
                 SEMICNError(units);
             }
+            stmtType = "Exp";
         }
         finPaser(tp);
-        return new PaserUnit(tp, units);
+        return new PaserUnit(tp, units, stmtType);
     }
 
     public PaserUnit Exp() {
@@ -556,7 +569,9 @@ public class Paser {
     public PaserUnit PrimaryExp() {
         ArrayList<PaserUnit> units = new ArrayList<>();
         String tp = "PrimaryExp";
+        String Pritp;
         if (curType() == TKtype.LPARENT) {
+            Pritp = "Exp";
             addEndUnit(units);
             curUnit = Exp();
             units.add(curUnit);
@@ -566,14 +581,18 @@ public class Paser {
                 RPARENTError(units);
             }
         } else if (curType() == TKtype.INTCON) {
+            Pritp = "Number";
             curUnit = Number();
             units.add(curUnit);
         } else {
+            Pritp = "LVal";
             curUnit = LVal();
             units.add(curUnit);
         }
         finPaser(tp);
-        return new PaserUnit(tp, units);
+        PaserUnit unit = new PaserUnit(tp, units);
+        unit.setPrimaryExpType(Pritp);
+        return unit;
     }
 
     public PaserUnit Number() {
