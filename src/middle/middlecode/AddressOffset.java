@@ -30,6 +30,7 @@ public class AddressOffset extends Node {
 
     @Override
     public String toString() {
-        return "OFFSET " + base + ", " + offset + ", " + target;
+        return target + " = " + base + " " + offset;
+        // return "OFFSET " + base + ", " + offset + ", " + target;
     }
 }

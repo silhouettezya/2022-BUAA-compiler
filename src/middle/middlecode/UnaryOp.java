@@ -2,6 +2,8 @@ package middle.middlecode;
 
 import middle.symboltable.Symbol;
 
+import java.util.HashMap;
+
 public class UnaryOp extends Node {
     public enum Op {
         MOV,    // INT to INT
@@ -11,6 +13,14 @@ public class UnaryOp extends Node {
         CLZ,    // INT to INT
         ABS,    // INT to INT
     }
+
+    HashMap<UnaryOp.Op, String> map = new HashMap<UnaryOp.Op, String>() {
+        {
+            put(Op.MOV, "");
+            put(Op.NEG, "-");
+            put(Op.NOT, "!");
+        }
+    };
 
     private Op op;
     private Operand src;
@@ -36,6 +46,9 @@ public class UnaryOp extends Node {
 
     @Override
     public String toString() {
+        if (map.containsKey(op)) {
+            return dst + " = " + map.get(op) + src;
+        }
         return op.name() + " " + src + ", " + dst;
     }
 }

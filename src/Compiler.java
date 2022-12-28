@@ -21,6 +21,7 @@ public class Compiler {
         //String filePath = "./output.txt";
         //String filePath = "./error.txt";
         String filePath = "./mips.txt";
+        //String filePath = "./middlecode.txt";
         File file = new File(filePath);
         FileOutputStream fos = null;
         try {
@@ -48,12 +49,67 @@ public class Compiler {
         }
         new PrintfTrans().optimize(ir);
 
-        new RemoveAfterJump().optimize(ir);
-        new MergeBlock().optimize(ir);
-        new MulDivOpt().optimize(ir);
+        // 输出未优化的目标码和中间代码
+        /*{
+            filePath = "./testfile1_20373384_朱彦安_优化前中间代码.txt";
+            file = new File(filePath);
+            fos = null;
+            try {
+                fos = new FileOutputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            System.setOut(new PrintStream(fos));
+            ir.output();
+            filePath = "./testfile1_20373384_朱彦安_优化前目标代码.txt";
+            file = new File(filePath);
+            fos = null;
+            try {
+                fos = new FileOutputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            System.setOut(new PrintStream(fos));
+            Mips mips = new Translator(ir).toMips();
+            mips.output();
+        }
 
-        Mips mips = new Translator(ir).toMips();;
-        new JumpFollow().optimize(mips);
+        {
+            filePath = "./testfile1_20373384_朱彦安_优化后中间代码.txt";
+            file = new File(filePath);
+            fos = null;
+            try {
+                fos = new FileOutputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            System.setOut(new PrintStream(fos));
+            new RemoveAfterJump().optimize(ir);
+            new MergeBlock().optimize(ir);
+            new MulDivOpt().optimize(ir);
+            ir.output();
+            filePath = "./testfile1_20373384_朱彦安_优化后目标代码.txt";
+            file = new File(filePath);
+            fos = null;
+            try {
+                fos = new FileOutputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            System.setOut(new PrintStream(fos));
+            Mips mips = new Translator(ir).toMips();
+            new JumpFollow().optimize(mips);
+            mips.output();
+        }*/
+
+        //new RemoveAfterJump().optimize(ir);
+        //new MergeBlock().optimize(ir);
+        //new MulDivOpt().optimize(ir);
+
+        //ir.output();
+
+        Mips mips = new Translator(ir).toMips();
+        //new JumpFollow().optimize(mips);
 
         mips.output();
     }

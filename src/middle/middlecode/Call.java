@@ -41,8 +41,11 @@ public class Call extends Node {
 
     @Override
     public String toString() {
-        return "CALL " + function.getLabelName() + ", ["
-                + params.stream().map(Object::toString).reduce((s, s2) -> s + ", " + s2).orElse("") + "]"
-                + (Objects.nonNull(ret) ? " -> " + ret : "");
+        return params.stream().map(Object::toString).reduce((s, s2) -> s + "push " + s2 + "\n").orElse("")
+                + "    call " + function.getLabelName() + "\n"
+                + (Objects.nonNull(ret) ? "    " + ret + " = RET" : "");
+        /*return "CALL " + function.getLabelName() + ", ["
+                + params.stream().map(Object::toString).reduce((s, s2) -> s + ", " + s2 + "\n").orElse("") + "]"
+                + (Objects.nonNull(ret) ? " -> " + ret : "");*/
     }
 }

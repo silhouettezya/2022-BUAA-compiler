@@ -23,6 +23,7 @@ public class Return extends Node {
 
     @Override
     public String toString() {
-        return "RETURN" + (hasValue() ? " " + value : "");
+        return "ret" + (hasValue() ? " " + value : "");
+        //return "RETURN" + (hasValue() ? " " + value : "");
     }
 }

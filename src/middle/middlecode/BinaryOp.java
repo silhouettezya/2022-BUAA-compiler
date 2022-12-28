@@ -2,6 +2,8 @@ package middle.middlecode;
 
 import middle.symboltable.*;
 
+import java.util.HashMap;
+
 public class BinaryOp extends Node {
     public enum Op {
         ADD,
@@ -26,6 +28,31 @@ public class BinaryOp extends Node {
         MOVZ,   // MOV src1 TO dst IF !src2
         MULHI,  // HI part of MUL
     }
+
+    HashMap<Op, String> map = new HashMap<Op, String>() {
+        {
+            put(Op.ADD, " + ");
+            put(Op.SUB, " - ");
+            put(Op.MUL, " * ");
+            put(Op.DIV, " / ");
+            put(Op.MOD, " % ");
+            put(Op.GT, " > ");
+            put(Op.GE, " >= ");
+            put(Op.LT, " < ");
+            put(Op.LE, " <= ");
+            put(Op.EQ, " == ");
+            put(Op.NE, " != ");
+            put(Op.ANDL, " && ");
+            put(Op.ORL, " || ");
+            put(Op.AND, " & ");
+            put(Op.OR, " | ");
+            put(Op.XOR, " ^ ");
+            put(Op.SLL, " << ");
+            put(Op.SRA, " >> ");
+            put(Op.MULHI, " * ");
+        }
+    };
+
 
     private Op op;
     private Operand src2;
@@ -57,6 +84,9 @@ public class BinaryOp extends Node {
 
     @Override
     public String toString() {
+        if (op != Op.MOVN && op != Op.MOVZ) {
+            return dst + " = " + src1 + map.get(op) + src2;
+        }
         return op.name() + " " + src1 + ", " + src2 + ", " + dst;
     }
 }

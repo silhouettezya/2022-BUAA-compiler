@@ -14,6 +14,7 @@ public class Jump extends Node {
 
     @Override
     public String toString() {
-        return "J " + target.getLabel();
+        return "goto " + target.getLabel();
+        //return "J " + target.getLabel();
     }
 }

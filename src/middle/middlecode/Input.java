@@ -15,6 +15,7 @@ public class Input extends Node {
 
     @Override
     public String toString() {
-        return "INPUT " + dst;
+        return dst + " = " + "getint()";
+        //return "INPUT " + dst;
     }
 }
