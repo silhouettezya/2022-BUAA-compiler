@@ -17,6 +17,14 @@ public class Translator {
     private RegisterMap registerMap = new RegisterMap();
     private Mips mips = new Mips();
 
+    // 记录当前正在翻译的函数
+    private FuncInfo currentFunc = null;
+    private int currentStackSize = 0; // 当前正在翻译的函数已经用掉的栈的大小（局部变量+临时变量）
+
+    // BFS 基本块
+    private final HashSet<BasicBlock> visitedBlock = new HashSet<>();
+    private final Queue<BasicBlock> queueBlock = new LinkedList<>();
+
     public Translator(MiddleCode ir) {
         this.ir = ir;
     }
@@ -55,10 +63,10 @@ public class Translator {
     }
 
     // 从函数头部开始, 将基本块中的中间代码翻译成 MIPS 目标代码
-    public void translateFunction(FuncInfo meta) {
-        currentFunc = meta;
-        currentStackSize = meta.getStackSize();
-        BasicBlock head = meta.getBody();
+    public void translateFunction(FuncInfo funcInfo) {
+        currentFunc = funcInfo;
+        currentStackSize = funcInfo.getStackSize();
+        BasicBlock head = funcInfo.getBody();
         queueBlock.offer(head);
         while (!queueBlock.isEmpty()) {
             BasicBlock block = queueBlock.poll();
@@ -121,20 +129,12 @@ public class Translator {
         }
     }
 
-    // 记录当前正在翻译的函数
-    private FuncInfo currentFunc = null;
-    private int currentStackSize = 0; // 当前正在翻译的函数已经用掉的栈的大小（局部变量+临时变量）
-
-    // BFS 基本块
-    private final HashSet<BasicBlock> visitedBlock = new HashSet<>();
-    private final Queue<BasicBlock> queueBlock = new LinkedList<>();
-
     public void translateBasicBlock(BasicBlock block) {
         processTempVariableUses(block);
         mips.setLabel(block.getLabel());
         Node code = block.getHead();
         while (code.hasNext()) {
-            mips.setDescription(code.toString());
+            // mips.setDescription(code.toString());
             if (code instanceof BinaryOp) {
                 translateBinaryOp((BinaryOp) code);
             } else if (code instanceof Call) {

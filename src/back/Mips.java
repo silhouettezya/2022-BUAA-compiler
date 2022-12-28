@@ -69,10 +69,10 @@ public class Mips {
             follow.setLabel(label);
             label = null;
         }
-        if (!description.isEmpty()) {
+        /*if (!description.isEmpty()) {
             follow.setDescription(description);
             description = "";
-        }
+        }*/
         MipsInstruction last = (MipsInstruction) tail.getPrev();
         last.setNext(follow);
         follow.setPrev(last);

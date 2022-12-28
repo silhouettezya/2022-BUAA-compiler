@@ -61,13 +61,13 @@ public abstract class MipsInstruction extends Node {
         if (hasLabel()) {
             sb.append(getLabel()).append(":\n");
         }
-        if (hasDescription()) {
+        /*if (hasDescription()) {
             sb.append("# ").append(getDescription()).append("\n");
-        }
+        }*/
         sb.append(instrToString());
-        if (hasComment()) {
+        /*if (hasComment()) {
             sb.append("  # ").append(getComment());
-        }
+        }*/
         return sb.toString();
     }
 
